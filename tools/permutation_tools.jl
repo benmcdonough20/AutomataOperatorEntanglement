@@ -48,3 +48,13 @@ function entanglement_spec(cycle, N)
 end
 
 cycle_to_perm_mat(cycle, N) = Base.permutecols!!(Matrix{Float64}(I, N, N), cycles_to_perm(cycle, N))
+
+function mom_chain(t)
+    return vcat([[(i,i),(i%t+1,i)] for i in 1:t]...)
+end
+
+n = 2
+k = 1
+P = randperm(2^n)
+P = [(p + 2^k-1)%2^n + 1 for p in P]
+perm

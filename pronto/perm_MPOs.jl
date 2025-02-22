@@ -1,17 +1,17 @@
-"""Spectral properties of locally generated permutations as a function of depth"""
-
-using Pkg; Pkg.activate("ITensorEnv")
+using LinearAlgebra
 using ITensors
-using ProgressBars
 using Random
 using LinearAlgebra
+using ThreadPinning
+
+BLAS.set_num_threads(Int(ncputhreads()/Threads.nthreads()))
 
 T = Matrix{ComplexF64}
 
-#create random permutation matrix
-rand_perm_mat(d) = T(Base.permutecols!!(Matrix(I, d, d), randperm(d)))
+function rand_perm_mat(d) :: T
+    return Base.permutecols!!(Matrix(I, d, d), randperm(d))
+end
 
-#create a brickwork layer of local permutations
 function layer(sites)
     Q1 = Vector{ITensor}()
     for i in 1:Int(floor(length(sites)/3))
@@ -31,38 +31,30 @@ function layer(sites)
     return (Q1,Q2,Q3)
 end
 
-#conjugate by layer
 function apply_layer(O, l)
-    O = apply(l[1], O, apply_dag = true)#apply_day conjugates $O$ by l[1]
+    O = apply(l[1], O, apply_dag = true)
     O = apply(l[2], O, apply_dag = true)
     O = apply(l[3], O, apply_dag = true)
     O
 end
 
-layers = 15 #max layers
-sizes = [6,8,10,12] #system sizes
-samples = 2^20 #fixed number of singular values at each size
+const layers = 15
+const sizes = [12]
+const samples = [2^5]
 
-for s in sizes
-    for j in ProgressBar(1:samples*2^(-s))
-        dists = [[] for l in 1:layers]
+for (k,s) in enumerate(sizes)
+    for j in 1:samples[k]
+        dists = []
         sites = siteinds(2, s)
-        O = MPO(
-            sites, 
-            [
-                [T([1 0; 0 1]) for i in 1:(Int(s/2)-1)];
-                [T([0 1; 1 0])]; #X on qubit n/2
-                [T([1 0; 0 1]) for i in Int(s/2):s]
-            ]
-        )
-        for l in ProgressBar(1:layers)
+        O = MPO(sites, [[T([1 0; 0 1]) for i in 1:(Int(s/2)-1)];[T([0 1; 1 0])];[T([1 0; 0 1]) for i in Int(s/2):s]])
+        for l in 1:layers
             O = apply_layer(O, layer(sites))
             orthogonalize!(O, Int(s/2))
             H,Λ,V = svd(O[Int(s/2)], uniqueinds(O[Int(s/2)], O[Int(s/2)+1]), cutoff = 1E-13)
-            dists[l] = diag(Λ)
+	    push!(dists, diag(Λ))
         end
-        for (i,d) in enumerate(dists) #write data
-            f = open("data/automaton_MPOs/l$(i)s$(s).dat", append = true, create = true)
+        for (i,d) in enumerate(dists)
+            f = open("/home/benm2/data/perm_MPOs/l$(i)s$(s).dat", append = true, create = true)
             println(f, d)
             close(f)
         end

@@ -1,5 +1,15 @@
 semicircle(x) = 1/(2π*sqrt(x))*sqrt(4-x)
 semicircle_CDF(x) = x ≥ 4 ? 1 : (x ≤ 0 ? 0 : 1/2π*(2π+x*sqrt(4/x-1)-4*atan(sqrt(4/x-1))))
+wigner_PDF(x) = 0 <= x <= 2 ? 1/π * sqrt(4-x^2) : 0 #Integration convention: use right sums!
+wigner_CDF(x) = 0 <= x <= 2 ? 1/π * (x/2*sqrt(4-x^2) + 2 * asin(x/2)) : (x < 0 ? 0 : 1)
+WD_PDF(x) = 27/8 * (x+x^2)/(1+x+x^2)^(5/2)
+WD_PDF_adj(x) = WD_PDF(x) + B/(1+x)^2*(1/(x+1/x)-A*1/(x+1/x)^2)
+WD_CDF(x) = 1/4*(2+(1+2x)*(x^2+x-2)/(1+x+x^2)^(3/2))
+
+B = 0.233378
+A = 2*(π-2)/(4-π)
+δWD(x) = 1/4*B*(-2*(1+A)+(2+A)/(1+x)+A/(1+x^2)+(2+A)*atan(x))
+WD_CDF_adj(x) = 1/4*(2+(1+2x)*(x^2+x-2)/(1+x+x^2)^(3/2)) + δWD(x)
 
 struct distribution
     range
@@ -54,6 +64,6 @@ function Wass(Q, actual_dist::distribution, bin)
 end
 
 function bin(dist, start, stop, num)
-    step = (stop-start)/num
-    [sum(start+(i-1)*step .<= dist .< start + i*step) for i in 1:num-1] ./ (length(dist) * step)
+    x = LinRange(start, stop, num)
+    [sum(x[i] .<= dist .< x[i+1]) for i in 1:length(x)-1]/length(dist) * (num-1) / stop
 end
