@@ -12,18 +12,31 @@ aut = [vcat(dat, zeros(Float64, 2^12 - length(dat))) for dat in d]
 aut1 = aut[1]
 aut = vcat(aut...)
 
+f = open("data/automata_vs_bern/automata_spectrum.txt", read = true)
+aut = parse.(Float64, split(read(f, String), "\n")[2:end-1])
+close(f)
+
 f = open("data/automata_vs_bern/bernoulli_spectrum.txt", read = true)
 bern = parse.(Float64, split(read(f, String), "\n")[2:end-1])
 close(f)
 
-bwidth = .0375
+f = open("data/automata_vs_bern/permutation_spectrum.txt", read = true)
+perm = parse.(Float64, split(read(f, String), "\n")[2:end-1])
+close(f)
+
+bwidth = .03175
 bins = 0:bwidth:3
-plot(size=(500,200), palette = :seaborn_dark)
-histogram!(aut, bins = bins, normalize = true, label = "N=12, l=15", linetype = :stephist, alpha = .5, linewidth = 2)
-histogram!(bern, bins = bins, normalize = true, label = "Bernoulli spectrum", linetype = :stephist, alpha = .5, linewidth = 2)
-xlabel!(L"\lambda")
-ylabel!(L"p(\lambda)")
-savefig("final_paper_figures/aut_vs_bern_inset.svg")
+histogram(bern, bins = bins, normalize = true, label = "Bernoulli avg OES", linetype = :stephist, palette = seaborn, linewidth = 2)
+histogram!(aut, bins = bins, normalize = true, label = L"$\{P^tXP\}_P$ avg OES", linetype = :stephist, palette = seaborn, linewidth = 2)
+histogram!(perm, bins = bins, normalize = true, label = L"$\{P\}$ avg OES", linetype = :stephist, linewidth = 2)
+histogram!(aut1, bins = bins, normalize = true, label = L"$P^tXP$ OES", linetype = :stephist, linewidth = 2)
+est = exp(-exp(-1)) + 2*exp(-1) -1
+hline!([est/bwidth], label = L"$p(\{0\})$ pred.")
+plot!(LinRange(0,2,100), x->sqrt(1/pi)*sqrt(4-x^2))
+xlims!(0,2.2)
+xlabel!(L"\sqrt{\lambda}")
+ylabel!(L"p(\sqrt{\lambda})")
+savefig("final_paper_figures/aut_vs_bern_vs_perm.svg")
 
 
 plot(size=(500,200), palette = :seaborn_dark)

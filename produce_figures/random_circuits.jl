@@ -4,7 +4,6 @@ using Plots
 using LaTeXStrings
 using StatsBase
 using LsqFit
-using CurveFit
 
 include("../tools/plotting_defaults.jl")
 
@@ -151,6 +150,28 @@ scatter(log10.(xax), log10.(h.weights))
 params = LsqFit.curve_fit(model, log10.(xax[inds]), log10.(h.weights[inds]), [1.0, 0.0]).param
 plot!(log10.(xax), x->-params[2]*x+params[1])
 
+cols = [HSV(c2.h, c2.v, c2.s -.2*i) for i in -2:1]
+p = plot(axesfontsize = 30)
+for (i,n) in enumerate(6:2:12)
+	dist = vcat(read_dat(n, round(Int, n/2))...)
+	h = StatsBase.fit(Histogram,dist, nbins = 100)
+	h = StatsBase.normalize(h; mode = :pdf)
+	e = h.edges[1].step.hi
+	h.weights
+	xax = [e*(i+1/2) for i in 0:length(h.edges[1])-2]
+	inds = (xax .> 0) .& (h.weights .> 0) .& (1:length(xax) .< 12)
+	scatter!(log10.(xax), log10.(h.weights), color = cols[i], label = "", markerstrokewidth = 0)
+	@.model(x,p) = -p[2]*x+p[1]
+	params = LsqFit.curve_fit(model, log10.(xax[inds]), log10.(h.weights[inds]), [1.0, 0.0]).param
+	plot!(log10.(xax), x->-params[2]*x+params[1], color = cols[i], label = "η = $(round(params[2], digits = 2))", linewidth = 2)
+end
+display(p)
+xlabel!(L"$\log(r)$")
+ylabel!(L"$p(\log(r))$")
+
+savefig("final_paper_figures/powerlaw_inset.svg")
+
+cols = [HSV(c1.h, c1.v, c1.s -.2*i) for i in -2:1]
 p = plot(axesfontsize = 20)
 for (i,n) in enumerate(6:2:12)
 	dist = vcat(read_dat(n, 15)...)

@@ -10,7 +10,7 @@ using LinearAlgebra
 
 #average permutation spectrum Bernoulli vs Automaton
 samples = 2^6
-ss = 10
+ss = 12
 Px = [0.0 1.0; 1.0 0.0]
 d = 2^ss
 X = kron([[[1 0; 0 1] for i in 1:Int(ss/2-1)];[Px];[[1 0; 0 1] for i in 1:Int(ss/2)]]...)
@@ -22,12 +22,19 @@ for i in ProgressBar(1:samples)
     push!(dist_bern, svdvals(P)...)
 end
 
-dist_perm = []
+dist_aut = []
 for i in ProgressBar(1:samples)
     P = rand_perm_mat(d);
     O = P*X*P'
     ptranspose!(O)
-    push!(dist_perm, svdvals(O)...)
+    push!(dist_aut, svdvals(O)...)
+end
+
+dist_perm = []
+for i in ProgressBar(1:samples)
+    P = rand_perm_mat(d);
+    ptranspose!(P)
+    push!(dist_perm, svdvals(P)...)
 end
 
 #save data
@@ -37,8 +44,16 @@ for d in dist_bern
 println(f, d)
 end
 close(f)
+
 f = open("data/automata_vs_bern/automata_spectrum.txt", write = true, create = true)
 println(f, "samples: 64, system size: 12, matrix type: automata")
+for d in dist_aut
+println(f, d)
+end
+close(f)
+
+f = open("data/automata_vs_bern/permutation_spectrum.txt", write = true, create = true)
+println(f, "samples: 64, system size: 12, matrix type: permutation")
 for d in dist_perm
 println(f, d)
 end
@@ -95,11 +110,23 @@ for d in dist
 end
 close(f)
 
-plot(size = (300,400), palette = :seaborn_deep)
-histogram!(dist[dist .> 1E-13]./8, normalize = true, linetype = :stephist, label = L"2^{-N/4} \times P^tZP")
-plot!(LinRange(0, 2, 100), x->1/π * sqrt(4-x^2), label = "semicircle", color = palette(:seaborn_deep)[4])
-xlabel!(L"\lambda")
-ylabel!(L"p(\lambda)")
+f = open("data/off_diagonal/diagonal.dat")
+dat = read(f, String)
+close(f)
+dat1 = split(dat, "\n")[1:end-1]
+dist = parse.(Float64, dat1)
+
+#histogram(dist[dist .> 1E-13]./8, normalize = true, linetype = :stephist, label = L"2^{-N/4} \times P^tZP", palette = seaborn, bins = 0:.05:2.1)
+histogram(dist./8, normalize = true, linetype = :stephist, label = L"2^{-N/4} \times P^tZP", palette = seaborn, bins = 0:.1:2.1)
+plot!(LinRange(0, 2, 100), x->1/π * sqrt(4-x^2)/64, label = "semicircle (rescaled)", color = palette(:seaborn_deep)[4])
+xlabel!(L"\sqrt{\lambda}")
+ylabel!(L"p(\sqrt{\lambda})")
+ylims!(0, .04)
+yticks!(0:.004:02)
+
+savefig("final_paper_figures/Z_aut_evo_unscaled.svg")
+savefig("final_paper_figures/Z_aut_evo_scaled.svg")
+
 savefig("final_paper_figures/Z_aut_evo.svg")
 
 sum(dist .> 1E-5)/length(dist)
