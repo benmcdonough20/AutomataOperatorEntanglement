@@ -1,5 +1,5 @@
 using Pkg
-Pkg.activate("automata")
+Pkg.activate("environment")
 using Plots
 using RandomQuantum
 using StatsBase
@@ -15,6 +15,7 @@ using LsqFit
 using CurveFit
 using Arrow
 using Kronecker
+using SimplePartitions
 
 include("../tools/pauli_tools.jl")
 include("../tools/permutation_tools.jl")

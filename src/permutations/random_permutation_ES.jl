@@ -1,6 +1,6 @@
 include("../tools/imports.jl")
 
-#Generate data for Fig. 7
+#Generate data for Fig. 5
 samples = 2^6
 ss = 12
 Px = [0.0 1.0; 1.0 0.0]

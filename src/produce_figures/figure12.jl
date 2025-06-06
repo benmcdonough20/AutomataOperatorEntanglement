@@ -256,4 +256,3 @@ dist = []
 map(x->push!(dist, x), D)
 
 barplt(dist)
-

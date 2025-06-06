@@ -1,12 +1,4 @@
-include("tools/QI_tools.jl")
-include("tools/ES_tools.jl")
-include("tools/plotting_defaults.jl")
-include("tools/distribution_tools.jl")
-
-using RandomQuantum
-using LaTeXStrings
-using LinearAlgebra
-using Plots
+include("../tools/imports.jl")
 
 #Phases plot
 rel_phases = π .+(0:8)*1/16*π
@@ -44,7 +36,6 @@ for (i,dist) in enumerate(dists)
     if i == 2
         lab = L"ϕ \neq n\pi/4"
     end
-    #histogram!(dist, normalize = true, linetype = :stephist, label = lab, color = c)
     h = bin(dist, 0, 4, 50)
     xax = LinRange(0, 4, 50) .+ 4/100
     scatter!(xax, h, color = c, label = lab, markerstrokewidth = 0, marker = :o, markersize = 3)
@@ -61,6 +52,4 @@ b = 1
 plot!(xax, r-> 1/Zb * (r+r^2)^b/(1 + r + r^2)^(3/2*b + 1), color = seaborn[4], label = "WD, β = 1")
 plot!(xax, x-> 3/4*(x+1)/(1+x+x^2)^(3/2), color = seaborn[1], label = "Surmise for GOE")
 
-savefig("figs/paper/magic.svg")
-
-display(p)
+savefig(".../../figures/angle_dependence.svg")

@@ -15,53 +15,41 @@ The scripts and notebooks in this repository were used to generate the figures a
 ```
 .
 ├── README.md               # This file
-├── requirements.txt        # Python dependencies
-├── src/                    # Main simulation and analysis code
-│   ├── circuits.py
-│   ├── entanglement.py
-│   └── plot_helpers.py
-├── data/                   # Output data (optional or .gitignored)
-├── figures/                # Reproduced figures from the paper
-└── run_all.sh              # Script to regenerate all main figures
+├── environment/            # Julia environment
+├── src/                    # Code for simulation and analysis 
+│   ├── cluster/                # Numerical experiments run on the ISU compute cluster Pronto
+│   ├── MPOs/                   # MPO simulations of local unitary and automaton circuits
+│   ├── permutations/           # Numerical experiments for random automatons, automaton-evolved operators, and Bernoulli matrices
+│   └── produce_figures/        # Analysis code used to produce figures
+├── data/                   # Output data (linked with GitHub LFS)
+└── figures/                # Figures produced by the code
 ```
 
 ## Getting Started
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/operator-entanglement-spectra.git
-   cd operator-entanglement-spectra
+   git clone https://github.com/benmcdonough20/AutomataOperatorEntanglement.git 
+   cd AutomataOperatorEntanglement
    ```
 
-2. Create a virtual environment and install dependencies:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
+2. Activate Julia environment and install dependencies:
+   ```julia
+   using Pkg; Pkg.activate("environment")
+   Pkg.instantiate()
    ```
 
-3. Run the main analysis:
-   ```bash
-   bash run_all.sh
-   ```
+3. Run all files in ```src/produce_figures``` to generate raw figures.
 
 This will reproduce the core numerical results and figures from the manuscript.
 
 ## Dependencies
 
-The code was developed using Python 3.10 and relies on:
-
-- NumPy
-- SciPy
-- Matplotlib
-- QuTiP (for some circuit simulations)
-- JAX (optional: for faster simulation backends)
-
-All dependencies are listed in `requirements.txt`.
+All of the dependencies are listed in the ```environment/``` folder, and can be installed by running ```Pkg.instantiate()```.
 
 ## Reproducibility
 
-The random seeds used for all stochastic sampling are fixed in the code. Some simulations may take several hours on a standard laptop. Intermediate data is saved to the `data/` directory.
+Some simulations may take several hours on a standard laptop. Generated data is saved to the `data/` directory.
 
 ## License
 
@@ -69,7 +57,7 @@ This code is made available under the MIT License. See `LICENSE` for details.
 
 ## Contact
 
-For questions or comments, please contact [your email] or open an issue.
+For questions or comments, please contact ```ben.mcdonough@colorado.edu``` or open an issue.
 
 ---
 
@@ -77,4 +65,11 @@ For questions or comments, please contact [your email] or open an issue.
 
 If you use this code in your own work, please cite:
 
-> Ben McD. et al., *Bridging Classical and Quantum Information Scrambling with the Operator Entanglement Spectrum*, submitted to *Physical Review X* (2025).
+```latex
+@article{mcdonough2025bridging,
+  title={Bridging Classical and Quantum Information Scrambling with the Operator Entanglement Spectrum},
+  author={McDonough, Ben T and Chamon, Claudio and Wilson, Justin H and Iadecola, Thomas},
+  journal={arXiv preprint arXiv:2505.05575},
+  year={2025}
+}
+```

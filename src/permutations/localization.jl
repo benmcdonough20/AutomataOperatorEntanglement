@@ -1,3 +1,11 @@
+#This code is not reflected in the paper; The purpose of this notebook
+#is to explore the origin of the singular component of the permutation OES
+#in the localization of eigenvectors on subtrees of the graph.
+#This is a further interesting connection that could have implications for
+#for the study of computational complexity.
+
+include("../tools/imports.jl")
+
 using Graphs
 using Compose
 using GraphPlot
@@ -37,10 +45,7 @@ function right_eigenspaces(M)
     d
 end
 
-#norm(M'*M*d[1][:,1])
-
 #each key in is an eigenspace of M'M. Now the goal is to find a unitary transformation minimizing the IPR
-
 comm(A,B) = A*B-B*A
 
 function AntiSym(offdiags::Vector{Float64}, N)
@@ -102,8 +107,6 @@ gplot(DiGraph(M); gplot_kwargs...)
 d = right_eigenspaces(M)
 d[1]
 keys(d)
-#resvecs = optimize_subspace(d[1.0])
-#resvecs = d[2.6180339887]
 
 
 v = d[1.6601454497]
@@ -127,21 +130,13 @@ ret = optimize(f, α0, NelderMead(), Optim.Options(iterations = 100000)) #better
 
 resvecs = v*SO(ret.minimizer, N)
 
-include("tools/plotting_defaults.jl")
-
-heatmap(abs.(d[1.0]), linewidth = 0, clims = (0,1))
-xticks!(1:12)
-title!(L"$\lambda=1$ eigenvector amplitude heatmap")
-xlabel!(L"\psi")
-ylabel!(L"|\langle v | \psi \rangle|")
-savefig("figs/localization optimization/before_optim_one_N100.svg")
 heatmap(abs.(resvecs), clims = (0,1))
 title!(L"$\lambda=1$ after optimization")
 xlabel!(L"\psi")
 ylabel!(L"|\langle v | \psi \rangle|")
 xticks!(1:12)
-savefig("figs/localization optimization/after_optim_one_N100.svg")
-#Note: kernel does not appear to be localized!
+savefig("../../figures/localized_eigenvectors.svg")
+#Note: kernel does not appear to be localized
 
 IPRs_cyclic = []
 IPRs_acyclic = []
@@ -183,7 +178,6 @@ for k in ProgressBar(keys(d))
         end 
     end
 end
-
 
 scatter([p[1] for p in IPRs_acyclic], [p[2] for p in IPRs_acyclic], label = "acyclic support", color = :blue, marker = :X, markersize = 5)
 scatter!([p[1] for p in IPRs_cyclic], [p[2] for p in IPRs_cyclic], label = "cyclic support", color = :red, marker = :X, markersize = 5)
