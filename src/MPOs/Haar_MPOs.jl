@@ -46,7 +46,7 @@ for (k,s) in enumerate(sizes)
             dists[l] = diag(Λ)
         end
         for (i,d) in enumerate(dists)
-            f = open("/home/ben/Documents/AutonomaProject/MPOs/dat/l$(i)s$(s).dat", append = true, create = true)
+            f = open("data/unitary_MPOs/l$(i)s$(s).dat", append = true, create = true)
             println(f, d)
             close(f)
         end

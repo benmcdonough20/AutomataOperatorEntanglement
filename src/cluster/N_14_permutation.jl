@@ -51,7 +51,7 @@ for i in 1:samples
 	push!(save_dist, D)
 end
 
-f = open("/home/benm2/data/big_perm_data/X_data_14.dat", "w")
+f = open("data/X_data_14.dat", "w")
 for d in save_dist
 	println(f, d)
 end

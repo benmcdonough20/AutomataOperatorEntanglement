@@ -130,7 +130,7 @@ title!(L"$\lambda=1$ after optimization")
 xlabel!(L"\psi")
 ylabel!(L"|\langle v | \psi \rangle|")
 xticks!(1:12)
-savefig("../../figures/localized_eigenvectors.svg")
+savefig("figures/localized_eigenvectors.svg")
 #Note: kernel does not appear to be localized
 
 IPRs_cyclic = []
