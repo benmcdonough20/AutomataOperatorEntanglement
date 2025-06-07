@@ -21,7 +21,7 @@ The scripts and notebooks in this repository were used to generate the figures a
 │   ├── cluster/                # Numerical experiments run on the ISU compute cluster Pronto
 │   ├── MPOs/                   # MPO simulations of local unitary and automaton circuits
 │   ├── permutations/           # Numerical experiments for random automatons, automaton-evolved operators, and Bernoulli matrices
-│   ├── evolution/           # Comparison of level spacings between classical matrix ensembles and evolved observables
+│   ├── evolution/              # Comparison of level spacings between classical matrix ensembles and evolved observables
 │   └── produce_figures/        # Analysis code used to produce figures
 ├── data/                   # Output data (linked with GitHub LFS)
 └── figures/                # Figures produced by the code
@@ -51,7 +51,7 @@ All of the dependencies are listed in the ```environment/``` folder, and can be 
 
 ## Reproducibility
 
-Some simulations may take several hours on a standard laptop. Generated data is saved to the `data/` directory.
+Some simulations may take several days on a standard laptop. Generated data is saved to the `data/` directory.
 
 ## License
 
