@@ -77,3 +77,19 @@ function spacings(dist; adj = false, prec = 0)
 	end
 	arr
 end
+
+δWD(x, C, cb, β) = C/(1+x)^2*((x+1/x)^(-β)-cb*(x+1/x)^(-(β+1)))
+
+function WD(β)
+    if β == 0 #For real matrices
+        return x->3/4*(x+1)/(1+x+x^2)^(3/2)
+    elseif β == 1
+        C = 0.233378
+        cb = 2*(π-2)/(4-π)
+        return x->27/8*(x+x^2)/(1+x+x^2)^(5/2)+δWD(x, C, cb, β)
+    elseif β == 2
+        C = 0.578846
+        cb = 4*(4-π)/(3π-8)
+        return x->81/4*sqrt(3)/π*(x+x^2)^2/(1+x+x^2)^(4) + δWD(x, C, cb, β)
+    end
+end

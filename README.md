@@ -15,11 +15,13 @@ The scripts and notebooks in this repository were used to generate the figures a
 ```
 .
 ├── README.md               # This file
+├── run_all.sh              # Run all analysis and regenerate figures
 ├── environment/            # Julia environment
 ├── src/                    # Code for simulation and analysis 
 │   ├── cluster/                # Numerical experiments run on the ISU compute cluster Pronto
 │   ├── MPOs/                   # MPO simulations of local unitary and automaton circuits
 │   ├── permutations/           # Numerical experiments for random automatons, automaton-evolved operators, and Bernoulli matrices
+│   ├── evolution/           # Comparison of level spacings between classical matrix ensembles and evolved observables
 │   └── produce_figures/        # Analysis code used to produce figures
 ├── data/                   # Output data (linked with GitHub LFS)
 └── figures/                # Figures produced by the code
@@ -39,7 +41,7 @@ The scripts and notebooks in this repository were used to generate the figures a
    Pkg.instantiate()
    ```
 
-3. Run all files in ```src/produce_figures``` to generate raw figures.
+3. Run files in ```src/produce_figures``` to generate raw figures.
 
 This will reproduce the core numerical results and figures from the manuscript.
 

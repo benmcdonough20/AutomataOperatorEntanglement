@@ -6,16 +6,12 @@
 
 include("../tools/imports.jl")
 
+#additional dependencies
 using Graphs
 using Compose
 using GraphPlot
-using LinearAlgebra
 using Colors
 using Optim
-using Plots
-using ProgressBars
-using StatsBase
-using LaTeXStrings
 
 import Cairo, Fontconfig
 
@@ -68,7 +64,6 @@ end
 function SO(offdiags::Vector{Float64}, N)
     exp(AntiSym(offdiags, N))
 end
-
 
 function separate_subgraphs(M, plotvec)
     g = DiGraph(M')
@@ -184,22 +179,6 @@ scatter!([p[1] for p in IPRs_cyclic], [p[2] for p in IPRs_cyclic], label = "cycl
 title!("Weight of eigenvectors on cyclic and acyclic subgraphs")
 xlabel!("λ")
 ylabel!(L"weight \ (\# nodes)")
-savefig("figs/paper/eigvec_weight.svg")
 
-keys
-
-IPRs
-
-typeof.([d[k] for k in keys(d)])
-size.([d[k] for k in keys(d)], 2)
-d[collect(keys(d))[2]]
-
-
-
-    #draw(PNG("figs/localization optimization/$(i)_eigenvec.png"), p)
-#Maybe we can try constrained but with gradient provided? -> slower
 colmap = x->colormap("RdBu", 101)[round(Int,(x+1)/2*100+1)]
 gplot(DiGraph(M'), nodefillc = [colmap(v) for v in plotvec]; gplot_kwargs...)
-
-
-#get relevant subgraph

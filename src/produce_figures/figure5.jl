@@ -26,6 +26,6 @@ hline!([est/bwidth], label = L"$p(\{0\})$ pred.", color = :black, linestyle= :da
 xlims!(0,2.2)
 xlabel!(L"\sqrt{\lambda}")
 ylabel!(L"p(\sqrt{\lambda})")
-savefig("final_paper_figures/aut_vs_bern_vs_perm.svg")
+savefig("figures/fig5.svg")
 
 

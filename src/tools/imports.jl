@@ -16,8 +16,8 @@ using CurveFit
 using Arrow
 using Kronecker
 using SimplePartitions
+using Graphs
 
-include("../tools/pauli_tools.jl")
 include("../tools/permutation_tools.jl")
 include("../tools/ES_tools.jl")
 include("../tools/distribution_tools.jl")

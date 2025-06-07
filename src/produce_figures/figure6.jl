@@ -13,7 +13,7 @@ xlabel!(L"\sqrt{\lambda}")
 ylabel!(L"p(\sqrt{\lambda})")
 ylims!(0, .04)
 yticks!(0:.004:02)
-savefig("figures/Z_aut_evo.svg")
+savefig("figures/fig6.svg")
 
 #(Not included in paper) Show that OES of automaton-evolved OES is the same for all off-diagonal operators
 f = open("data/off_diagonal/spectrum_vs_angle.dat", read = true)
@@ -29,4 +29,3 @@ for (i,d) in enumerate(dists)
 end
 xlabel!(L"\lambda")
 ylabel!(L"p(\lambda)")
-savefig("final_paper_figures/off_diagonal.svg")

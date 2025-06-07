@@ -1,14 +1,13 @@
 include("../tools/imports.jl")
 
 #Plot Fig. 7
-f = open("rand_perm_moms.dat", "w")
-println(f, moms)
-close(f)
-
-for s in sizes
-    for i in 1:4
-        moms[s][i] = real(moms[s][i])
-    end
+f = open("data/rand_perm_moms.dat", "r")
+moms = Dict()
+sizes = [6,8,10,12]
+ks = [2,3,4,5]
+for (size,s) in zip(sizes,split(read(f, String), "\n")[1:end-1])
+    arr = [t[1:end] for t in split.(s[14:end-2], "[")]
+    moms[size] = [parse.(Float64,strip.(s, ']')[1:end-1]) for s in split.(arr, ",")]
 end
 
 #Data for a permutation on system size N=14 (computed separately due to memory constraints)
@@ -33,13 +32,12 @@ moms_ideal = [3, 12, 57, 303]
 for (k,m) in zip(1:4, moms_ideal)
     plot!(sizes, [(m-mean(moms[s][k]))/m for s in sizes], yerr = [std(moms[s][k])/(m*sqrt(length(moms[s][k]))) for s in sizes], yaxis = :log, label = "k = $(k+1)", color = seaborn[k], linewidth = 2, marker = "x")
 end
-display(p)
 
 xlabel!(L"N")
 ylabel!(L"\frac{\langle \lambda^k \rangle - m_k}{m_k}")
 title!(L"Convergence of $X(\tau)$ OES moments to Bernoulli ensemble")
 
-savefig("figs/paper/moments_convergence.svg")
+savefig("figures/fig7.svg")
 
 f = open("data/automata_vs_bern/automata_spectrum.txt", read = true)
 aut = parse.(Float64, split(read(f, String), "\n")[2:end-1])
@@ -59,4 +57,4 @@ histogram!(bern, bins = blist, normalize = true, label = "Bernoulli spectrum", l
 xlabel!(L"\sqrt{\lambda}")
 ylabel!(L"p(\sqrt{\lambda})")
 yticks!(0:2:12)
-savefig("final_paper_figures/aut_circuit_vs_bern_insert.svg")
+savefig("figures/fig7_inset.svg")

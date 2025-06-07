@@ -56,9 +56,7 @@ hline!([dkl_minerr], color = :black, linestyle = :dash, label = "GUE (numerics)"
 xticks!(1:12)
 xlabel!(L"n_H")
 ylabel!(L"D_{\text{KL}}(\text{spacings} || \text{WD})")
-#savefig("/home/ben/Desktop/figs/spacingratio_KL_divergence.svg")
-savefig("final_paper_figures/doped_automata_X_WD_convergence.svg")
-display(p)
+savefig("figures/fig10_panel1.svg")
 
 #spacing comparison inset
 function get_data(n, nh)
@@ -74,11 +72,11 @@ dat2 = vcat(spacings.([copy(col) for col in Arrow.Table("/home/benm/Documents/re
 h1 = StatsBase.fit(Histogram,dat1[dat1 .<= 25], nbins = 400)
 h2 = StatsBase.fit(Histogram,dat2[dat2 .<= 25], nbins = 400)
 
-plot(LinRange(0, 5, 500), WD(1), linewidth = 2, color = c2, label = L"\text{WD},\beta = 1")
-plot!(LinRange(0, 5, 500), WD(0), linewidth =2, color=c1, label = L"p_{GOE}")
-
 c1 = seaborn[1]
 c2 = seaborn[4]
+
+plot(LinRange(0, 5, 500), WD(1), linewidth = 2, color = c2, label = L"\text{WD},\beta = 1")
+plot!(LinRange(0, 5, 500), WD(0), linewidth =2, color=c1, label = L"p_{GOE}")
 
 scatter!(collect(h1.edges[1]) .+ (.5*25/length(h1.weights)), h1.weights ./ length(dat1) * length(h1.weights)/25, color = c1, label = L"sparse $H$", markersize = 8)
 scatter!(collect(h2.edges[1]) .+ (.5*25/length(h2.weights)), h2.weights ./ length(dat2) * length(h2.weights)/25, color = c2, label = L"sparse $R_x$", markersize = 8)
@@ -87,7 +85,7 @@ xlims!(0, 4)
 xlabel!(L"r")
 ylabel!(L"p(r)")
 
-savefig("final_paper_figures/X_level_spacing_inset.svg")
+savefig("figures/fig10_panel1_inset.svg")
 
 #Second panel
 function get_data(n, nh)
@@ -108,5 +106,4 @@ hline!([dkl_minerr], color = :black, linestyle = :dash, label = "GUE (numerics)"
 xticks!(1:12)
 xlabel!(L"n_H")
 ylabel!(L"D_{\text{KL}}(\text{spacings} || \text{WD})")
-savefig("final_paper_figures/doped_automata_Z_WD_convergence.svg")
-display(p)
+savefig("figures/fig10_panel2.svg")

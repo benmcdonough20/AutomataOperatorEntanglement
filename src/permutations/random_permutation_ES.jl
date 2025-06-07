@@ -73,6 +73,7 @@ for d in dists
 end
 close(f)
 
+#Generate data for inset of Fig. 6
 op = kron([1 0; 0 -1],Matrix(I, 2^(D-1), 2^(D-1)))
 dist = []
 samples = 64
@@ -91,7 +92,7 @@ close(f)
 
 #Compute moments
 moms = Dict()
-sizes = [6,8,10,12,14]
+sizes = [6,8,10,12]
 for s in sizes
     moms[s] = [[],[],[],[]]
 end
@@ -112,6 +113,8 @@ for (k,s) in ProgressBar(enumerate(sizes))
     end
 end
 
-f = open("../data/rand_perm_moms.dat", "w")
-println(f, moms)
+f = open("data/rand_perm_moms.dat", write = true, create = true)
+for s in sizes
+    println(f, moms[s])
+end
 close(f)

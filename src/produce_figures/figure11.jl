@@ -3,8 +3,10 @@ include("../tools/imports.jl")
 #Phases plot
 rel_phases = π .+(0:8)*1/16*π
 dists = []
+n=10
 
-r = RandomQuantum.ClosedHaarEnsemble(2)
+d = 2^n
+r = GOE(d)
 
 for ϕ in ProgressBar(rel_phases)
     U = exp(1im*ϕ*[0 1; 1 0])
@@ -12,10 +14,10 @@ for ϕ in ProgressBar(rel_phases)
     X = kron(X, Matrix(I, 2^(n-1), 2^(n-1)))
     dist = []
     for i in ProgressBar(1:100)
-        O = rand_PHP(n,5)
+        O = rand(r)
         M = O*X*O'
         vals = ES2(M)
-        push!(dist, level_spacings(vals)...)
+        push!(dist, spacings(vals)...)
     end
     push!(dists, dist)
 end
@@ -52,4 +54,4 @@ b = 1
 plot!(xax, r-> 1/Zb * (r+r^2)^b/(1 + r + r^2)^(3/2*b + 1), color = seaborn[4], label = "WD, β = 1")
 plot!(xax, x-> 3/4*(x+1)/(1+x+x^2)^(3/2), color = seaborn[1], label = "Surmise for GOE")
 
-savefig(".../../figures/angle_dependence.svg")
+savefig("figures/fig11.svg")

@@ -36,11 +36,10 @@ for (n,dat,err) in zip(6:2:12, moms, stds)
 	#throw out datapoints if the resampling error was too large
 	plot!(good_points ./ n, dat[good_points], marker = :o, yerr = err[good_points], label = "N=$(n)", linewidth = 2)
 end
-display(p)
 
 ylabel!(L"\frac{\langle \lambda^2 \rangle - 3}{3}")
 xlabel!("l/N")
-savefig("final_paper_figures/local_permutation_moments.svg")
+savefig("figures/fig8.svg")
 
 f = open("data/automata_vs_bern/automata_spectrum.txt", read = true)
 aut = parse.(Float64, split(read(f, String), "\n")[2:end-1])
@@ -59,4 +58,4 @@ histogram!(bern, bins = blist, normalize = true, label = "Bernoulli spectrum", l
 xlabel!(L"\sqrt{\lambda}")
 ylabel!(L"p(\sqrt{\lambda})")
 yticks!(0:2:12)
-savefig("final_paper_figures/aut_circuit_vs_bern_insert.svg")
+savefig("figures/fig8_inset.svg")

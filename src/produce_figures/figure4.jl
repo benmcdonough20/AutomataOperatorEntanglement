@@ -59,14 +59,6 @@ function spacings(dist)
 	[divs[i+1]/divs[i] for i in 1:length(divs)-1]
 end
 
-#sample data plot
-dist = vcat(spacings.(read_dat(6, 15))...)
-sort(dist)
-length(dist)
-histogram(dist[dist .< 25], normalize = true, linetype = :stephist)
-plot!(LinRange(0, 25, 500), WD(1))
-xlims!(0, 3)
-
 #for error estimation
 function resample(dist, sample_size)
 	num_samples = floor(length(dist) ÷ sample_size)
@@ -79,13 +71,7 @@ for (i,n) in enumerate(6:2:12)
 	dkls = [get_WD_dkl(vcat(spacings.(read_dat(n, l))...)) for l in 1:layers]
 	plot!((1:layers)/n, dkls, label = "N=$(n)", marker = :o, color = cols[i], markerstrokewidth= 0)
 end
-title!("Level spacing ratio convergence with circuit depth")
-xlabel!(L"l/N")
-yticks!(10.0 .^ [0, -1, -2, -3, -4])
-ylabel!(L"D_{\text{KL}}")
-savefig("figs/paper/dkl_evo.svg")
 
-p = plot(yaxis = :log)
 cols = [HSV(c2.h, c2.v, c2.s -.2*i) for i in -2:1]
 for (i,n) in enumerate(6:2:12)
 	dkls = [get_semicircle_dkl(vcat(read_dat(n, l)...)) for l in 1:layers]
@@ -93,9 +79,11 @@ for (i,n) in enumerate(6:2:12)
 end
 title!("Entanglement spectrum convergence with circuit depth")
 xlabel!(L"l/N")
-xlims!(0,2)
+yticks!(10.0 .^ [0, -1, -2, -3, -4])
 ylabel!(L"D_{\text{KL}}")
-savefig("final_paper_figures/distribution_evolution_unitary_fixed.svg")
+xlabel!(L"l/N")
+xlims!(0,2)
+savefig("figures/fig4.svg")
 
 #extract slopes
 rngs = [(3,7), (6,9), (5,9), (7,11)]
@@ -105,7 +93,6 @@ xax = LinRange(0, 2, 100)
 for (p,n) in zip(params, 6:2:12)
 	plot!(xax, x->exp(p[1]+x*n*p[2]))
 end
-display(p)
 
 #Unviersal function of l/N? (does not appear in paper figure)
 scatter(log.(6:2:12), [log(-p[2]) for p in params],  marker = :X, markersize = 10, xtickfontsize = 16, ytickfontsize = 16, label = "", guidefontsize = 14)
@@ -113,7 +100,6 @@ xlabel!(L"\log(N)")
 ylabel!(L"\log(\gamma_N)")
 a,b = linear_fit(log.(6:2:12), [log(-p[2]) for p in params])
 plot!(LinRange(log(6), log(12), 100), x->a+b*x, linewidth = 2, linestyle = :dash, color = :black, label = "")
-savefig("figs/paper/slope_inset.svg")
 
 #Scale-invariant power law observed in spacings (Fig. 4 inset)
 cols = [HSV(c2.h, c2.v, c2.s -.2*i) for i in -2:1]
@@ -131,10 +117,9 @@ for (i,n) in enumerate(6:2:12)
 	params = LsqFit.curve_fit(model, log10.(xax[inds]), log10.(h.weights[inds]), [1.0, 0.0]).param
 	plot!(log10.(xax), x->-params[2]*x+params[1], color = cols[i], label = "η = $(round(params[2], digits = 2))", linewidth = 2)
 end
-display(p)
 xlabel!(L"$\log(r)$")
 ylabel!(L"$p(\log(r))$")
-savefig("final_paper_figures/powerlaw_inset.svg")
+savefig("figures/fig4_inset1.svg")
 
 #Confirm that MP distribution is reached by the final layer
 cols = [HSV(c1.h, c1.v, c1.s -.2*i) for i in -2:1]
@@ -149,7 +134,5 @@ for (i,n) in enumerate(6:2:12)
 	inds = (xax .> 0) .& (h.weights .> 0)
 	plot!(xax[inds], h.weights[inds], color = cols[i], marker = :o, label = "N=$(n)", markerstrokewidth=0)
 end
-display(p)
 plot!(LinRange(0, 2, 200), x->1/pi*sqrt(4-x^2), linewidth = 4, color = :black, label = "", linestyle = :dash)
-ylims!(-2.4, 1.1)
-savefig("final_paper_figures/MPLateTime.svg")
+savefig("figures/fig4_inset2.svg")

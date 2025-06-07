@@ -74,8 +74,7 @@ yticks!(10.0 .^[0,-1,-2,-3, -4, -5])
 xticks!(1:12)
 xlabel!(L"n_H")
 ylabel!(L"D_{\text{KL}}(\text{DOS} || \text{MP})")
-display(p1)
-savefig("final_paper_figures/doped_automata_X_MP_convergence_2.svg")
+savefig("figures/fig9_panel1.svg")
 
 #inset universal scaling function
 p1 = plot(yaxis = :log)
@@ -96,8 +95,7 @@ for (i,(dp,st)) in enumerate(zip(dat, stds))
 		markerstrokewidth = 0
 	)
 end
-display(p1)
-savefig("final_paper_figures/X_MP_DKL_scaling_inset.svg")
+savefig("figures/fig9_panel1_inset.svg")
 
 #Panel 2: diagonal operator
 function get_data(n, nh)
@@ -153,8 +151,7 @@ xlims!(3, 12)
 ylims!(4*10^(-4),.1)
 xlabel!(L"n_H")
 ylabel!(L"D_{\text{KL}}(\text{DOS}||\text{MP})")
-display(p1)
-savefig("final_paper_figures/doped_automata_Z_MP_convergence.svg")
+savefig("figures/fig9_panel2.svg")
 
 #Universal scaling function
 p1 = plot(yaxis = :log)
@@ -175,5 +172,4 @@ for (i,(dp,st)) in enumerate(zip(dat, stds))
 		markerstrokewidth =0
 	)
 end
-display(p1)
-savefig("final_paper_figures/Z_MP_DKL_scaling_inset.svg")
+savefig("figures/fig9_panel2_inset.svg")
