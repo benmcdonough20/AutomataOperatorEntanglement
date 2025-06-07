@@ -54,7 +54,7 @@ for (k,s) in enumerate(sizes)
 	    push!(dists, diag(Λ))
         end
         for (i,d) in enumerate(dists)
-            f = open("/home/benm2/data/perm_MPOs/l$(i)s$(s).dat", append = true, create = true)
+            f = open("data/perm_MPOs/l$(i)s$(s).dat", append = true, create = true)
             println(f, d)
             close(f)
         end

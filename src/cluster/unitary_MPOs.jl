@@ -45,8 +45,7 @@ for (k,s) in enumerate(sizes)
 	    push!(dists, diag(Λ))
         end
         for (i,d) in enumerate(dists)
-            #f = open("/home/benm2/data/unitary_MPOs/l$(i)s$(s).dat", append = true, create = true)
-            f = open("/home/benm/Documents/repos/AutomataOperatorEntanglement/data/data/unitary_MPOs/l$(i)s$(s).dat", append = true, create = true)
+            f = open("data/unitary_MPOs/l$(i)s$(s).dat", append = true, create = true)
             println(f, d)
             close(f)
         end

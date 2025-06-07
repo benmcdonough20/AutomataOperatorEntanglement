@@ -76,4 +76,4 @@ Threads.@threads for i in 1:samples
 	save_dist[!, i] = D
 end
 
-Arrow.write("/home/benm2/data/data_interleaved/$(opname)_N$(N)_nH$(nH).arrow", save_dist)
+Arrow.write("data/sparse_Rx/$(opname)_N$(N)_nH$(nH).arrow", save_dist)

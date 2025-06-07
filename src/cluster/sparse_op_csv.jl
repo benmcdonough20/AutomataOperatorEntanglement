@@ -49,7 +49,7 @@ for i in 1:samples
 	O = Mat*X*Mat'
 	ptranspose!(O, dim)
 	D = svdvals(O)
-	f = open("semicircle_data/$(opname)_N$(N)_nH$(nH).csv",create=true, append=true)	
+	f = open("data/sparse_H/$(opname)_N$(N)_nH$(nH).csv",create=true, append=true)	
 	println(f, "sample $(i)")
 	for d in D
 		println(f, d)
